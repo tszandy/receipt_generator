@@ -1,14 +1,29 @@
 from fpdf import FPDF
 import datetime
+import argparse
+parser = argparse.ArgumentParser(description="receipt argument")
+
+parser.add_argument('-d', '--description', type=str, default="TRADITIONAL SWEDISH MASSAGE", help='An service description')
+parser.add_argument('-p','--price', type=int, default=85, help='An service price')
+parser.add_argument('-t','--tip', type=int, default=85, help='An service tip')
+parser.add_argument('-D','--Date', type=str, default=85, help='An service Date')
+parser.add_argument('-s','--seed', type=int, default=85, help='random seed')
+
+args = parser.parse_args()
+
+description = args.description
+price = args.price
+tip = args.tip
+date = datetime.datetime.strptime(args.Date, "%Y-%m-%d")
+random_seed = args.seed
+
 
 title_image = 'pink-lotus.jpg'
 pdf_w=210
 pdf_h=297
 p = 10000000019
 border = 0
-random_seed = 103
 receipt_number = "B{:09x}".format(pow(101,random_seed,p))
-data_today = datetime.datetime.now()
 
 text = '''
 Boston Wellness Massage & Skin Care
@@ -17,10 +32,8 @@ Suite 21 B, Boston, MA 02116
 +1 (617)959-3901
 cindywei@bostonwellnessmassage.com
 '''
-price = 95
-tip = 25
-data = [['Description', 'Price', 'Quantity','Tax 6.25%', 'Total']]
-data.append(['TRADITIONAL SWEDISH MASSAGE','{:5.2f}'.format(price/1.0625),'1','{:5.2f}'.format(price - 95/1.0625),'{:5.2f}'.format(price)])
+data = [['Description', 'Price', 'Quantity', 'Total']]
+data.append([description,'{:5.2f}'.format(price),'1','{:5.2f}'.format(price)])
 
 
 class Receipt_generator(FPDF):
@@ -30,7 +43,7 @@ class Receipt_generator(FPDF):
         self.set_font('Arial', 'B', 15)
         self.cell(epw, 10, 'Receipt #:' + ' ' + receipt_number, border = border, ln=0, align='R')
         self.ln(8)
-        self.cell(epw, 10, 'Date :'+' '+'{}-{}-{}'.format(data_today.year,data_today.month,data_today.day), border = border, ln=0, align='R')
+        self.cell(epw, 10, 'Date :'+' '+'{}-{}-{}'.format(date.year,date.month,date.day), border = border, ln=0, align='R')
         self.ln(40)
 
     def body(self):
@@ -59,7 +72,6 @@ class Receipt_generator(FPDF):
             self.cell(col_width, th, str(row[1]), border=1)
             self.cell(col_width, th, str(row[2]), border=1)
             self.cell(col_width, th, str(row[3]), border=1)
-            self.cell(col_width, th, str(row[4]), border=1)
             self.ln(th)
         self.ln(20)
 
