@@ -86,13 +86,13 @@ class Receipt_generator(FPDF):
         self.ln(th)
 
         self.cell(col_width*5, th, '', border=0)
-        self.cell(col_width, th, str('Tip:'), border=1, align='R')
+        self.cell(col_width, th, str('Tax:'), border=1, align='R')
         self.cell(col_width, th, str('{:5.2f}'.format(tip)), border=1, align='R')
         self.ln(th)
 
         self.set_font('Arial', 'B', 10)
         self.cell(col_width*5, th, '', border=0)
-        self.cell(col_width, th, str('Total:'), border=1, align='R')
+        self.cell(col_width, th, str('Grand Total:'), border=1, align='R')
         self.cell(col_width, th, str('{:5.2f}'.format(price + tip)), border=1, align='R')
         self.ln(th)
 
